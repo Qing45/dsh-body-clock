@@ -1,0 +1,59 @@
+{
+  "name": "dsh-body-clock",
+  "version": "1.0.0",
+  "description": "A draggable floating window with three tabs — meals, water, standing. It picks breakfast, lunch and dinner at random (three tries a day, no repeats, editable food lists), counts water cups and standing breaks, and reminds you with a distinct 3-second chime per tab. Collapses to a 32px ball.",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node test/run-tests.mjs"
+  },
+  "keywords": [
+    "deepseek",
+    "harness",
+    "dsh",
+    "dsh-plugin",
+    "reminder",
+    "floating-window",
+    "habit",
+    "meal",
+    "water",
+    "stand-up"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qing45/dsh-body-clock.git"
+  },
+  "homepage": "https://github.com/Qing45/dsh-body-clock#readme",
+  "bugs": {
+    "url": "https://github.com/Qing45/dsh-body-clock/issues"
+  },
+  "author": "Qing45",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-slots"
+      ]
+    }
+  },
+  "license": "MIT"
+}

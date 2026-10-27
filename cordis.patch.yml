@@ -1,0 +1,6 @@
+# Bundle patch layer: inserts the Host half (a plain Cordis plugin) into the
+# profile config tree. The package's `dsh.client` declaration makes the Web app
+# load ./client.js as the browser half, which owns the draggable floating window.
+- insert:
+    - id: dsh-body-clock
+      name: dsh-body-clock

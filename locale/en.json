@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Body Clock",
+    "description": "A draggable floating window with three tabs — meals, water, standing. It picks breakfast, lunch and dinner at random (three tries a day, no repeats, editable food lists), counts water cups and standing breaks, and reminds you with a distinct 3-second chime per tab. Collapses to a 32px ball."
+  }
+}
