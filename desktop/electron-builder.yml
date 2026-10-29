@@ -52,6 +52,10 @@ win:
         - x64
 
 nsis:
+  # 两个 Windows 目标必须各有各的 artifactName：全局那条
+  # `${productName}-${version}-${arch}.${ext}` 会让 nsis 和 portable 撞名，
+  # 后打的把先打的覆盖掉，产物里只剩一个 exe（实测踩过）。
+  artifactName: BodyClock-Setup-${version}-${arch}.${ext}
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
@@ -59,5 +63,8 @@ nsis:
   createStartMenuShortcut: true
   shortcutName: 身体时钟
   deleteAppDataOnUninstall: false
+
+portable:
+  artifactName: BodyClock-${version}-${arch}-portable.${ext}
 
 publish: null
