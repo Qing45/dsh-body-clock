@@ -1,0 +1,27 @@
+{
+  "name": "dsh-body-clock-desktop",
+  "productName": "Body Clock",
+  "version": "1.0.0",
+  "private": true,
+  "description": "身体时钟 · 桌面版 — 决定今天吃什么，顺便管住喝水和站起来。与 DSH 插件共用同一份 client.js。",
+  "main": "src/main.js",
+  "author": "Qing45",
+  "license": "MIT",
+  "homepage": "https://github.com/Qing45/dsh-body-clock",
+  "scripts": {
+    "build:renderer": "node scripts/build-renderer.mjs",
+    "start": "npm run build:renderer && node scripts/electron-run.mjs .",
+    "icons": "node scripts/electron-run.mjs scripts/icons.js",
+    "dist:mac": "npm run build:renderer && electron-builder --mac",
+    "dist:win": "npm run build:renderer && electron-builder --win",
+    "dist": "npm run build:renderer && electron-builder -m -w",
+    "dev": "node scripts/electron-run.mjs ."
+  },
+  "devDependencies": {
+    "electron": "45.1.0",
+    "electron-builder": "26.18.0",
+    "esbuild": "0.28.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

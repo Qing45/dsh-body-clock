@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="身体时钟">
+  <!-- 托盘图标：单色剪影。macOS 的 template image 只取 alpha 通道，
+       颜色由系统按菜单栏深浅自动反转，所以这里统一用黑色。 -->
+  <path d="M13 30h38c0 10.5-8.5 18.4-19 18.4S13 40.5 13 30z" fill="#000"/>
+  <path d="M23 21c0-2.6 2.6-2.6 2.6-5.1M32 19c0-2.6 2.6-2.6 2.6-5.1M41 21c0-2.6 2.6-2.6 2.6-5.1"
+        fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M39 21.5l9.5 4.2M41 27.5l9 3.2"
+        fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

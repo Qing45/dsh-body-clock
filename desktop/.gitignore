@@ -1,0 +1,12 @@
+node_modules/
+release/
+.tmp/
+
+# 构建产物：每次构建从 ../client.js 和 src/theme.css 重新生成，
+# 不进版本库，避免和插件源码不同步。
+src/renderer.js
+src/renderer.css
+src/renderer.js.map
+
+# 图标产物是提交进仓库的（CI 不重新生成），但缓存目录不提交。
+.DS_Store

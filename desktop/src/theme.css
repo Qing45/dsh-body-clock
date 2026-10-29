@@ -1,0 +1,117 @@
+/* ------------------------------------------------------------------ *
+ * 身体时钟 · 桌面版 —— 宿主样式
+ *
+ * 这个文件只做两件事：
+ *   1. 把 DSH 的主题变量（--dsw-alias-*）在独立窗口里补回来；
+ *   2. 把 client.js 的「自由浮动层」改造成「窗口画布」。
+ *
+ * client.js 本身一行不改：它照旧用 left/top 记录位置（并写进 DOM 的
+ * inline style），桌面版读取那对坐标去移动窗口，元素本身被钉在窗口左上角
+ * 的边距上。视觉上的「拖动」于是变成了真正拖动窗口。
+ *
+ * 颜色值抽取自 DeepSeek Harness 的主题定义（浅色 / 深色两套），
+ * 因此桌面版的观感和插件里的浮窗完全一致，并跟随系统深色模式。
+ * ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light dark;
+
+  /* 窗口为内容预留的阴影边距，必须与 src/main.js 的 MARGIN 保持一致。 */
+  --bc-margin: 16px;
+
+  /* —— 浅色 —— */
+  --dsw-alias-label-primary: #0f1115;
+  --dsw-alias-label-secondary: #61666b;
+  --dsw-alias-bg-layer-1: #ffffff;
+  --dsw-alias-bg-layer-2: #ffffff;
+  --dsw-alias-border-l2: rgba(0, 0, 0, 0.1);
+  --dsw-alias-border-l1: rgba(0, 0, 0, 0.04);
+  --dsw-alias-interactive-bg-hover: rgba(38, 49, 72, 0.06);
+  --dsw-focus-ring-color: #0f1115;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* —— 深色 —— */
+    --dsw-alias-label-primary: #f9fafb;
+    --dsw-alias-label-secondary: #cfd3d6;
+    --dsw-alias-bg-layer-1: #232324;
+    --dsw-alias-bg-layer-2: #2c2c2e;
+    --dsw-alias-border-l2: rgba(255, 255, 255, 0.12);
+    --dsw-alias-border-l1: rgba(255, 255, 255, 0.06);
+    --dsw-alias-interactive-bg-hover: rgba(255, 255, 255, 0.08);
+    --dsw-focus-ring-color: #f9fafb;
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+}
+
+/* 拖拽时整窗跟随，别让文本被选中、别出现原生拖影。 */
+body {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* ------------------------------------------------------------------ *
+ * 关键改造：把浮层钉在窗口里
+ *
+ * client.js 渲染的根节点带 inline 的 left/top（它自己拖拽时更新的值）。
+ * 这里用 !important 把它按在边距上，inline 值仍然留在 DOM 上，
+ * boot.js 每帧读它，转成「窗口应该待在哪」。
+ * ------------------------------------------------------------------ */
+.dfp-root {
+  position: absolute !important;
+  left: var(--bc-margin) !important;
+  top: var(--bc-margin) !important;
+  /* 窗口透明，浮层自己要能接收鼠标。 */
+  pointer-events: auto;
+}
+
+/* 插件里这条是 `max-width: calc(100vw - 16px)`，用来在 DSH 窄面板里收缩。
+ * 独立窗口里必须去掉：窗口尺寸是根据内容算出来的，而 100vw 又跟着窗口宽度走，
+ * 两者会互相追赶（窗口越窄内容越高、内容越高窗口越怪），
+ * 实测会收敛到 146×1010 这种又窄又长的异常尺寸。 */
+.dfp-win {
+  max-width: none !important;
+}
+
+/* 深色模式下浮窗的投影要更重一点，否则贴在深色桌面上会糊成一片。 */
+@media (prefers-color-scheme: dark) {
+  .dfp-win {
+    box-shadow: 0 14px 32px -10px rgba(0, 0, 0, 0.65),
+      0 2px 6px rgba(0, 0, 0, 0.35) !important;
+  }
+  .dfp-pill {
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.6) !important;
+  }
+}
+
+/* 拖动窗口时，标题栏和悬浮球给出手型光标提示。 */
+.dfp-head {
+  cursor: grab;
+}
+.dfp-head:active {
+  cursor: grabbing;
+}
+
+/* 独立窗口里没有 DSH 的外层容器，最小化按钮不必再依赖宿主样式。 */
+.dfp-icon-btn {
+  -webkit-app-region: no-drag;
+}

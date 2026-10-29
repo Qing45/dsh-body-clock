@@ -1,0 +1,65 @@
+name: Build Desktop App
+
+# 桌面版（desktop/）的打包流水线。
+# macOS 包由 macos runner 原生打，Windows 包由 windows runner 原生打——
+# 不在 Mac 上交叉打 Windows 包，因为那条路要装 Wine，又慢又容易出问题。
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'desktop-v*'
+
+jobs:
+  build:
+    name: ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            label: macOS
+            args: --mac
+          - os: windows-latest
+            label: Windows
+            args: --win
+
+    defaults:
+      run:
+        working-directory: desktop
+
+    env:
+      # 不做代码签名：本地自用版本没有证书，让 electron-builder 别去找。
+      CSC_IDENTITY_AUTO_DISCOVERY: false
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 安装 Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 构建渲染进程
+        run: npm run build:renderer
+
+      - name: 打包
+        run: npx electron-builder ${{ matrix.args }} --publish never
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: body-clock-${{ matrix.label }}
+          # 只要安装包：dmg / exe / zip；不要 unpacked 目录和块映射文件。
+          path: |
+            desktop/release/*.dmg
+            desktop/release/*.exe
+            desktop/release/*.zip
+          if-no-files-found: error
+          retention-days: 30

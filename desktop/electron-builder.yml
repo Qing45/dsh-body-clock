@@ -1,0 +1,63 @@
+appId: com.qing45.bodyclock
+productName: 身体时钟
+artifactName: BodyClock-${version}-${arch}.${ext}
+copyright: Copyright © 2026 Qing45
+
+directories:
+  output: release
+  buildResources: build
+
+# 只把运行时真正需要的文件打进 asar。
+# 注意 src/client-source.generated.js、boot.js、theme.css 是构建期中间产物，
+# 已经被 esbuild 打包进 renderer.js / renderer.css，不必重复携带。
+files:
+  - src/main.js
+  - src/preload.js
+  - src/index.html
+  - src/renderer.js
+  - src/renderer.css
+  - assets/*.png
+  - package.json
+
+asar: true
+compression: maximum
+npmRebuild: false
+
+mac:
+  category: public.app-category.productivity
+  icon: build/icon.png
+  darkModeSupport: true
+  # 本地自用版本不做代码签名；首次打开需右键 →「打开」。
+  identity: null
+  hardenedRuntime: false
+  gatekeeperAssess: false
+  target:
+    - target: dmg
+      arch:
+        - arm64
+        - x64
+    - target: zip
+      arch:
+        - arm64
+        - x64
+
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 身体时钟
+  deleteAppDataOnUninstall: false
+
+publish: null
